@@ -1,0 +1,462 @@
+/* =======================
+   RESET
+=========================*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* =======================
+   REUSABLE CLASS
+=========================*/
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.btn-primary {
+  background: #28a745;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #218838;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-featured {
+  text-align: center;
+}
+
+/* =======================
+   HEADER
+=========================*/
+header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+header .container {
+  display: flex;              /* FLEX */
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 span {
+  color: #28a745;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;              /* FLEX */
+  gap: 1.5rem;
+}
+
+nav a {
+  color: #333;
+  font-weight: 500;
+}
+
+/* =======================
+  HERO
+=========================*/
+.hero {
+  display: flex;              /* FLEX */
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 0;
+}
+
+.hero-text {
+  max-width: 500px;
+}
+
+.hero img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* =======================
+   FEATURE SECTION
+=========================*/
+.section-title {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.8rem;
+  color: #222;
+}
+
+.grid-4 {
+  display: flex;             /* FLEX */
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.grid-4 .card {
+  flex: 1 1 calc(50% - 1.5rem);
+}
+
+/* =======================
+   FOOTER
+=========================*/
+footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+footer a {
+  color: #28a745;
+}
+
+/* =======================
+   RESPONSIVE
+=========================*/
+@media (min-width: 768px) {
+  .hero {
+    flex-direction: row;     /* FLEX ROW */
+    justify-content: space-between;
+  }
+
+  .grid-4 .card {
+    flex: 1 1 calc(25% - 1.5rem);
+  }
+}
+
+/* HERO SECTION */
+.hero {
+  background: url("project/hero-bg.png") center/cover no-repeat;
+  height: 70vh; /* tinggi 80% layar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+  text-align: center;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4); /* overlay gelap agar teks terbaca */
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+/* Tombol Hero */
+.btn-primary {
+  background-color: #8cc63f;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #6fa12e;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero {
+    height: 60vh;
+    padding: 1rem;
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Card Style */
+.card {
+  background: #cccaca;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-body h4 {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.card-body p {
+  font-size: 0.95rem;
+  margin: 0.5rem 0 1rem;
+}
+
+/* Global Font */
+body {
+  font-family: 'Lato', sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Heading pakai Poppins biar tegas */
+h1, h2, h3, h4 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #222;
+}
+
+/* === NAVIGASI HEADER === */
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+header nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Warna teks berubah */
+header nav ul li a:hover {
+  color: #ff6600;
+}
+
+/* Efek garis bawah animasi */
+header nav ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #ff6600;
+  transition: width 0.3s ease;
+}
+
+header nav ul li a:hover::after {
+  width: 100%;
+}
+
+/* Judul & Subjudul Paket Catering */
+.paket-heading {
+  text-align: center;        
+  margin-bottom: 40px;       
+}
+
+.paket-heading h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;       
+}
+
+.paket-heading h3 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;     
+  color: #444;
+}
+
+/* Section Promo & Cara Pesan */
+#promo, 
+#cara-pesan {
+  text-align: center;       /* rata tengah */
+  margin: 60px auto;        /* jarak atas bawah */
+  max-width: 700px;         /* biar teks gak terlalu melebar */
+}
+
+#promo h2, 
+#cara-pesan h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 15px;      /* jarak ke paragraf */
+}
+
+#promo p {
+  margin-bottom: 20px;      /* jarak ke tombol */
+  color: #444;
+}
+
+#cara-pesan ol {
+  text-align: left;         /* list biar rapi kiri */
+  margin: 0 auto 20px;      /* auto biar di tengah */
+  max-width: 500px;         /* biar gak kepanjangan */
+  padding-left: 20px;       /* sedikit indentasi */
+}
+
+#promo .btn,
+#cara-pesan .btn {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Tombol Info Selengkapnya */
+.card .btn-outline {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #ff6600;   /* warna oranye Nutribox */
+  border-radius: 8px;
+  color: #ff6600;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.card .btn-outline:hover {
+  background-color: #ff6600;
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-2px); /* efek naik sedikit */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;   /* tinggi disamakan */
+  object-fit: cover; /* biar gambar ter-crop rapi tanpa distorsi */
+  border-radius: 8px 8px 0 0; /* opsional, biar rapi sama card */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body a.btn {
+  margin-top: auto;     /* dorong tombol ke bawah */
+  align-self: center;   /* posisikan di tengah */
+}
+
+/* Grid Container */
+.grid-4 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: stretch;   /* pastikan semua card punya tinggi sama */
+}
+
+/* Card */
+.grid-4 .card {
+  flex: 1 1 calc(25% - 1.5rem); /* 4 kolom di layar besar */
+  display: flex;
+  flex-direction: column;       /* susun isi vertikal */
+}
+
+/* Card Body */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;   /* biar body mengisi ruang */
+}
+
+/* Deskripsi */
+.card-body p {
+  flex-grow: 1;   /* teks fleksibel, dorong tombol ke bawah */
+}
+
+/* Tombol Info Selengkapnya */
+.card-body a.btn,
+.card-body .btn-outline {
+  margin-top: auto;     /* otomatis dorong ke bawah */
+  align-self: center;   /* rata tengah */
+}
+
+/* === RESPONSIVE NAVBAR === */
+@media (max-width: 768px) {
+  header .container {
+    flex-direction: column;   /* logo di atas, menu di bawah */
+    align-items: flex-start;  /* biar menu rata kiri */
+  }
+
+  nav ul {
+    flex-direction: column;   /* menu jadi vertikal */
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+  }
+}
+
+/* === RESPONSIVE CARD GRID === */
+@media (max-width: 768px) {
+  .grid-4 {
+    flex-direction: column;   /* jadi satu kolom */
+    gap: 1rem;
+  }
+
+  .grid-4 .card {
+    flex: 1 1 100%;          /* full width */
+    max-width: 100%;         
+  }
+
+  .card img {
+    height: auto;            /* biar gambar proporsional */
+  }
+}
