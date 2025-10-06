@@ -1,0 +1,159 @@
+<?php
+session_start();
+
+// Jika user belum login, redirect ke halaman login
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Ambil data dari session
+$username = $_SESSION['username'];
+$login_time = $_SESSION['login_time'] ?? 'Unknown';
+
+// Ambil query string untuk filter paket (opsional)
+$filter = $_GET['filter'] ?? 'all';
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Nutribox Catering Diet Sehat</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <h1>Nutribox</h1>
+      <nav aria-label="Navigasi utama">
+        <ul>
+          <li><a href="#paket-catering">Paket Catering</a></li>
+          <li><a href="#promo">Promo</a></li>
+          <li><a href="#cara-pesan">Cara Pesan</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Deliciously Healthy<br> Perfectly Yours</h2>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <!-- User Info Section -->
+    <div class="user-info">
+      <div class="user-details">
+        <div class="user-name">Selamat datang, <?php echo htmlspecialchars($username); ?>! 👋</div>
+        <div class="login-time">Login: <?php echo htmlspecialchars($login_time); ?></div>
+      </div>
+      <a href="logout.php" class="btn-logout">Logout</a>
+    </div>
+
+    <!-- Motivational Quote Section -->
+    <section class="quote-section">
+      <div class="quote-text" id="quote-text">
+        <div class="loading"></div>
+      </div>
+      <div class="quote-author" id="quote-author"></div>
+    </section>
+
+    <section id="paket-catering" aria-labelledby="paket-catering-title">
+      <div class="paket-heading">
+        <h2 id="paket-catering-title">Paket Catering Nutribox</h2>
+        <h3>Temukan Tujuan Diet Anda</h3>
+        
+        <!-- Filter Buttons -->
+        <div class="filter-buttons">
+          <a href="?filter=all" class="filter-btn <?php echo $filter === 'all' ? 'active' : ''; ?>">Semua</a>
+          <a href="?filter=medical" class="filter-btn <?php echo $filter === 'medical' ? 'active' : ''; ?>">Medical</a>
+          <a href="?filter=weight" class="filter-btn <?php echo $filter === 'weight' ? 'active' : ''; ?>">Weight</a>
+          <a href="?filter=healthy" class="filter-btn <?php echo $filter === 'healthy' ? 'active' : ''; ?>">Healthy</a>
+          <a href="?filter=kids" class="filter-btn <?php echo $filter === 'kids' ? 'active' : ''; ?>">Kids</a>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <?php if ($filter === 'all' || $filter === 'medical'): ?>
+        <article class="card card-featured" data-package="medical">
+          <img src="project/medical.jpeg" alt="Medical Package">
+          <div class="card-body">
+            <h4>Medical Package</h4>
+            <p>Paket catering sehat untuk kebutuhan medis/pantangan seperti diabetes, jantung, stroke, ginjal, kolesterol, isolasi mandiri, dan kebutuhan khusus seperti ibu hamil dan pemulihan pasca operasi.</p>
+            <button class="btn btn-outline" data-info="medical">Info Selengkapnya</button>
+          </div>
+        </article>
+        <?php endif; ?>
+
+        <?php if ($filter === 'all' || $filter === 'weight'): ?>
+        <article class="card card-featured" data-package="weight">
+          <img src="project/weight.jpeg" alt="Weight Management">
+          <div class="card-body">
+            <h4>Weight Management</h4>
+            <p>Paket catering diet untuk bantu turunkan atau menambah berat badan. Menu rendah kalori, rendah garam, tinggi protein. Garansi turun hingga 3 kg dalam 2 minggu*</p>
+            <button class="btn btn-outline" data-info="weight">Info Selengkapnya</button>
+          </div>
+        </article>
+        <?php endif; ?>
+
+        <?php if ($filter === 'all' || $filter === 'healthy'): ?>
+        <article class="card card-featured" data-package="healthy">
+          <img src="project/healthy.jpeg" alt="Healthy Personal">
+          <div class="card-body">
+            <h4>Healthy Personal</h4>
+            <p>Paket catering makanan sehat untuk pemenuhan kebutuhan gizi sehari-hari dengan harga terjangkau. Tersedia paket mulai 7 hari hingga 28 hari.</p>
+            <button class="btn btn-outline" data-info="healthy">Info Selengkapnya</button>
+          </div>
+        </article>
+        <?php endif; ?>
+
+        <?php if ($filter === 'all' || $filter === 'kids'): ?>
+        <article class="card card-featured" data-package="kids">
+          <img src="project/kids.jpeg" alt="Baby and Kids Meal">
+          <div class="card-body">
+            <h4>Baby and Kids Meal</h4>
+            <p>Asupan gizi dan nutrisi terbaik untuk mendukung tumbuh kembang anak Anda. Biasakan makan sehat sejak dini. Tersedia untuk usia 1-9 tahun.</p>
+            <button class="btn btn-outline" data-info="kids">Info Selengkapnya</button>
+          </div>
+        </article>
+        <?php endif; ?>
+      </div>
+    </section>
+
+    <!-- PROMO -->
+    <section id="promo" aria-labelledby="promo-title">
+      <h2 id="promo-title">Promo Nutribox</h2>
+      <p>Dapatkan promo menarik setiap bulan: diskon spesial, bonus menu tambahan, hingga paket bundling hemat.</p>
+      <button class="btn btn-primary" id="btn-promo">Lihat Promo</button>
+    </section>
+
+    <!-- CARA PESAN -->
+    <section id="cara-pesan" aria-labelledby="cara-pesan-title">
+      <h2 id="cara-pesan-title">Cara Pesan di Nutribox</h2>
+      <ol>
+        <li>Pilih paket catering sesuai kebutuhan Anda.</li>
+        <li>Hubungi Nutribox via WhatsApp atau isi form di website.</li>
+        <li>Lakukan pembayaran sesuai instruksi.</li>
+        <li>Nutribox akan menyiapkan dan mengantar catering sehat tepat waktu.</li>
+      </ol>
+      <button class="btn btn-primary" id="btn-pesan">Pesan Sekarang</button>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 Nutribox | <a href="#" onclick="showNotification('Link referensi diklik!')">Link Referensi</a></p>
+  </footer>
+
+  <!-- Notification -->
+  <div class="notification" id="notification"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

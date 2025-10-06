@@ -724,6 +724,251 @@ footer a:hover {
 }
 
 /* =======================
+   LOGIN PAGE STYLES
+=========================*/
+body.login-page {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.login-container {
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+  max-width: 400px;
+  width: 100%;
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  color: #ff6600;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo p {
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid #f5c6cb;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+}
+
+.demo-info {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.demo-info strong {
+  display: block;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+/* =======================
+   DASHBOARD USER INFO
+=========================*/
+.user-info {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.user-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+.login-time {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.btn-logout {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: 2px solid white;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: white;
+  color: #28a745;
+  transform: translateY(-2px);
+}
+
+/* =======================
+   FILTER BUTTONS
+=========================*/
+.filter-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.6rem 1.5rem;
+  border: 2px solid #28a745;
+  background: transparent;
+  color: #28a745;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: #28a745;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* =======================
+   UTILITY CLASSES
+=========================*/
+.text-center {
+  text-align: center;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-up {
+  animation: slideInFromBottom 0.6s ease-out;
+}
+
+/* =======================
+   SCROLL ANIMATIONS
+=========================*/
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =======================
    RESPONSIVE DESIGN
 =========================*/
 @media (max-width: 768px) {
@@ -807,6 +1052,20 @@ footer a:hover {
   .search-container input {
     width: 90%;
   }
+
+  .user-info {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .login-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .logo h1 {
+    font-size: 2rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -825,52 +1084,4 @@ footer a:hover {
   .card {
     padding: 1.2rem;
   }
-}
-
-/* =======================
-   SCROLL ANIMATIONS
-=========================*/
-@keyframes slideInFromLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInFromBottom {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =======================
-   UTILITY CLASSES
-=========================*/
-.text-center {
-  text-align: center;
-}
-
-.mb-2 {
-  margin-bottom: 2rem;
-}
-
-.mt-2 {
-  margin-top: 2rem;
-}
-
-.fade-in {
-  animation: fadeIn 0.6s ease-out;
-}
-
-.slide-up {
-  animation: slideInFromBottom 0.6s ease-out;
 }
