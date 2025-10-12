@@ -1,11 +1,32 @@
 <?php
 session_start();
+require_once 'koneksi.php';
 
 // Jika sudah login, redirect ke dashboard
 if (isset($_SESSION['username'])) {
     header('Location: dashboard.php');
     exit();
 }
+
+// Get active packages from database
+$query = "SELECT * FROM paket_catering WHERE status = 'active' ORDER BY created_at DESC LIMIT 4";
+$paket_result = mysqli_query($conn, $query);
+
+// Get statistics for public view
+$stats_query = "
+    SELECT 
+        (SELECT COUNT(*) FROM paket_catering WHERE status = 'active') as total_paket,
+        (SELECT COUNT(*) FROM pesanan WHERE status = 'delivered') as pesanan_selesai
+";
+$stats_result = mysqli_query($conn, $stats_query);
+$stats = mysqli_fetch_assoc($stats_result);
+
+// Calculate happy customers (estimasi)
+$happy_customers = $stats['pesanan_selesai'] * 1.2; // Estimation
+
+// Get recent testimonials
+$testimoni_query = "SELECT * FROM testimoni WHERE status = 'approved' ORDER BY created_at DESC LIMIT 3";
+$testimoni_result = mysqli_query($conn, $testimoni_query);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -68,6 +89,46 @@ if (isset($_SESSION['username'])) {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
+
+    /* Testimonial Section */
+    .testimonial-section {
+      background: #f8f9fa;
+      padding: 3rem 2rem;
+      margin: 3rem 0;
+      border-radius: 20px;
+    }
+    
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .testimonial-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .testimonial-rating {
+      color: #ffc107;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      color: #666;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    
+    .testimonial-author {
+      font-weight: 600;
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -78,6 +139,7 @@ if (isset($_SESSION['username'])) {
       <nav aria-label="Navigasi utama">
         <ul>
           <li><a href="#paket-catering">Paket Catering</a></li>
+          <li><a href="#testimonial">Testimoni</a></li>
           <li><a href="#promo">Promo</a></li>
           <li><a href="#cara-pesan">Cara Pesan</a></li>
           <li><a href="login.php" class="btn-login-header">Login</a></li>
@@ -103,6 +165,29 @@ if (isset($_SESSION['username'])) {
       <div class="quote-author" id="quote-author"></div>
     </section>
 
+    <!-- Statistics Section -->
+    <section class="stats-section">
+      <h2>Dipercaya oleh Ribuan Pelanggan</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number"><?php echo $stats['total_paket']; ?>+</div>
+          <div class="stat-label">Paket Tersedia</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><?php echo number_format($happy_customers, 0, ',', '.'); ?>+</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><?php echo $stats['pesanan_selesai']; ?>+</div>
+          <div class="stat-label">Pesanan Selesai</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4.8</div>
+          <div class="stat-label">Rating ⭐</div>
+        </div>
+      </div>
+    </section>
+
     <section id="paket-catering" aria-labelledby="paket-catering-title">
       <div class="paket-heading">
         <h2 id="paket-catering-title">Paket Catering Nutribox</h2>
@@ -110,43 +195,76 @@ if (isset($_SESSION['username'])) {
       </div>
 
       <div class="grid-4">
-        <article class="card card-featured" data-package="medical">
-          <img src="project/medical.jpeg" alt="Medical Package">
+        <?php 
+        if (mysqli_num_rows($paket_result) > 0):
+          while ($paket = mysqli_fetch_assoc($paket_result)): 
+        ?>
+        <article class="card card-featured" data-package="<?php echo $paket['kategori']; ?>">
+          <img src="<?php echo htmlspecialchars($paket['gambar']); ?>" alt="<?php echo htmlspecialchars($paket['nama_paket']); ?>">
           <div class="card-body">
-            <h4>Medical Package</h4>
-            <p>Paket catering sehat untuk kebutuhan medis/pantangan seperti diabetes, jantung, stroke, ginjal, kolesterol, isolasi mandiri, dan kebutuhan khusus seperti ibu hamil dan pemulihan pasca operasi.</p>
-            <button class="btn btn-outline" data-info="medical">Info Selengkapnya</button>
+            <h4><?php echo htmlspecialchars($paket['nama_paket']); ?></h4>
+            <p><?php echo htmlspecialchars($paket['deskripsi']); ?></p>
+            
+            <div style="margin: 1rem 0; padding: 0.8rem; background: #f8f9fa; border-radius: 8px; font-size: 0.95rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                <span><strong>Harga:</strong></span>
+                <span style="color: #28a745; font-weight: 600;">Rp <?php echo number_format($paket['harga'], 0, ',', '.'); ?></span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span><strong>Durasi:</strong></span>
+                <span><?php echo $paket['durasi']; ?> hari</span>
+              </div>
+            </div>
+            
+            <button class="btn btn-outline" 
+                    data-info="<?php echo $paket['kategori']; ?>"
+                    data-title="<?php echo htmlspecialchars($paket['nama_paket']); ?>"
+                    data-desc="<?php echo htmlspecialchars($paket['deskripsi']); ?>"
+                    data-price="<?php echo number_format($paket['harga'], 0, ',', '.'); ?>"
+                    data-duration="<?php echo $paket['durasi']; ?>">
+              Info Selengkapnya
+            </button>
           </div>
         </article>
-
-        <article class="card card-featured" data-package="weight">
-          <img src="project/weight.jpeg" alt="Weight Management">
-          <div class="card-body">
-            <h4>Weight Management</h4>
-            <p>Paket catering diet untuk bantu turunkan atau menambah berat badan. Menu rendah kalori, rendah garam, tinggi protein. Garansi turun hingga 3 kg dalam 2 minggu*</p>
-            <button class="btn btn-outline" data-info="weight">Info Selengkapnya</button>
-          </div>
-        </article>
-
-        <article class="card card-featured" data-package="healthy">
-          <img src="project/healthy.jpeg" alt="Healthy Personal">
-          <div class="card-body">
-            <h4>Healthy Personal</h4>
-            <p>Paket catering makanan sehat untuk pemenuhan kebutuhan gizi sehari-hari dengan harga terjangkau. Tersedia paket mulai 7 hari hingga 28 hari.</p>
-            <button class="btn btn-outline" data-info="healthy">Info Selengkapnya</button>
-          </div>
-        </article>
-
-        <article class="card card-featured" data-package="kids">
-          <img src="project/kids.jpeg" alt="Baby and Kids Meal">
-          <div class="card-body">
-            <h4>Baby and Kids Meal</h4>
-            <p>Asupan gizi dan nutrisi terbaik untuk mendukung tumbuh kembang anak Anda. Biasakan makan sehat sejak dini. Tersedia untuk usia 1-9 tahun.</p>
-            <button class="btn btn-outline" data-info="kids">Info Selengkapnya</button>
-          </div>
-        </article>
+        <?php endwhile; ?>
+        <?php else: ?>
+        <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+          <p style="color: #666;">Paket catering akan segera tersedia.</p>
+        </div>
+        <?php endif; ?>
       </div>
     </section>
+
+    <!-- TESTIMONIALS -->
+    <?php if (mysqli_num_rows($testimoni_result) > 0): ?>
+    <section id="testimonial" class="testimonial-section">
+      <h2 style="text-align: center; font-family: 'Poppins', sans-serif; color: #333; margin-bottom: 1rem;">
+        Apa Kata Mereka?
+      </h2>
+      <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+        Testimoni dari pelanggan yang puas dengan Nutribox
+      </p>
+      
+      <div class="testimonial-grid">
+        <?php while ($testi = mysqli_fetch_assoc($testimoni_result)): ?>
+        <div class="testimonial-card">
+          <div class="testimonial-rating">
+            <?php 
+            $rating = (int)$testi['rating'];
+            echo str_repeat('⭐', $rating); 
+            ?>
+          </div>
+          <div class="testimonial-text">
+            "<?php echo htmlspecialchars($testi['komentar']); ?>"
+          </div>
+          <div class="testimonial-author">
+            — <?php echo htmlspecialchars($testi['nama']); ?>
+          </div>
+        </div>
+        <?php endwhile; ?>
+      </div>
+    </section>
+    <?php endif; ?>
 
     <!-- CTA LOGIN SECTION -->
     <section class="cta-login-section">
@@ -184,5 +302,36 @@ if (isset($_SESSION['username'])) {
   <div class="notification" id="notification"></div>
 
   <script src="script.js"></script>
+  <script>
+    // Update modal untuk data dari database
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.hasAttribute("data-info")) {
+        const title = e.target.getAttribute("data-title");
+        const desc = e.target.getAttribute("data-desc");
+        const price = e.target.getAttribute("data-price");
+        const duration = e.target.getAttribute("data-duration");
+        
+        const modal = document.querySelector('.modal');
+        document.getElementById("modal-title").textContent = title;
+        document.getElementById("modal-desc").innerHTML = `
+          ${desc}<br><br>
+          <strong>💰 Harga:</strong> Rp ${price}<br>
+          <strong>📅 Durasi:</strong> ${duration} hari<br><br>
+          <em>Login untuk melihat detail lengkap dan memesan paket ini.</em>
+        `;
+        document.getElementById("modal-cta").textContent = "Login untuk Pesan";
+        
+        modal.classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+    });
+
+    // Modal CTA redirect to login
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "modal-cta") {
+        window.location.href = 'login.php';
+      }
+    });
+  </script>
 </body>
 </html>

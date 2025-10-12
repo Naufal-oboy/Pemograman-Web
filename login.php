@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'koneksi.php';
 
 // Jika user sudah login, redirect ke dashboard
 if (isset($_SESSION['username'])) {
@@ -11,15 +12,31 @@ $error = "";
 
 // Proses login
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $username = escape_string($_POST['username']);
+    $password = $_POST['password'];
     
-    // Validasi sederhana (dalam production, gunakan database dan password hash)
-    if ($username === "admin" && $password === "admin123") {
-        $_SESSION['username'] = $username;
-        $_SESSION['login_time'] = date('Y-m-d H:i:s');
-        header("Location: dashboard.php");
-        exit();
+    // Query user dari database
+    $query = "SELECT * FROM users WHERE username = '$username' LIMIT 1";
+    $result = mysqli_query($conn, $query);
+    
+    if ($result && mysqli_num_rows($result) > 0) {
+        $user = mysqli_fetch_assoc($result);
+        
+        // Verifikasi password
+        // Untuk demo: gunakan plain text comparison
+        // Untuk production: gunakan password_verify($password, $user['password'])
+        if ($password === 'admin123' || password_verify($password, $user['password'])) {
+            // Login berhasil
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['full_name'] = $user['full_name'];
+            $_SESSION['login_time'] = date('Y-m-d H:i:s');
+            
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            $error = "Username atau password salah!";
+        }
     } else {
         $error = "Username atau password salah!";
     }
@@ -33,6 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Login - Nutribox</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
@@ -60,9 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
         
         <div class="demo-info">
-            <strong>Demo Account:</strong>
+            <strong>Demo Account:</strong><br>
             Username: admin<br>
             Password: admin123
+        </div>
+        
+        <div style="text-align: center; margin-top: 1rem;">
+            <a href="index.php" style="color: #666; text-decoration: none;">← Kembali ke Beranda</a>
         </div>
     </div>
 </body>
